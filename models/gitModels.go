@@ -7,3 +7,9 @@ type GitUser struct {
 	GravitarID string `json:"gravatar_id"`
 	Location   string `json:"location"`
 }
+
+type GitRepo struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	HTMLURL     string `json:"html_url"`
+}

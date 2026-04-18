@@ -30,3 +30,26 @@ func FetchGitUser(name string) (models.GitUser, error) {
 	return gitUser, nil
 
 }
+
+func FetchGitRepos(name string) ([]models.GitRepo, error) {
+	resp, err := http.Get("https://api.github.com/users/" + name + "/repos")
+	var gitRepos []models.GitRepo
+
+	if resp.StatusCode == http.StatusNotFound {
+		return []models.GitRepo{}, errors.New("user not found")
+	}
+	if err != nil || resp.StatusCode != http.StatusOK {
+		fmt.Println("Error fetching data:", err)
+		return []models.GitRepo{}, errors.New("failed to fetch git repos")
+	}
+
+	err = json.NewDecoder(resp.Body).Decode(&gitRepos)
+	if err != nil {
+		fmt.Println("Error decoding JSON:", err)
+		panic(err)
+	}
+
+	defer resp.Body.Close()
+	return gitRepos, nil
+
+}
